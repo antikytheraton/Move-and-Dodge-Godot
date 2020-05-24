@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/Steve.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Steve.gd" type="Script" id=2]
+[ext_resource path="res://new_env.tres" type="Environment" id=3]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -10,11 +11,11 @@
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 15, 1, 15 )
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=4]
 albedo_color = Color( 0.137255, 0.72549, 0.215686, 1 )
 
-[sub_resource type="CubeMesh" id=4]
-material = SubResource( 5 )
+[sub_resource type="CubeMesh" id=5]
+material = SubResource( 4 )
 size = Vector3( 30, 2, 30 )
 
 [node name="Level" type="Spatial"]
@@ -29,10 +30,6 @@ shape = SubResource( 1 )
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.981687, 0.190501, 0, -0.190501, 0.981687, 0, 7.42879, 19.0585 )
-fov = 69.7512
-
 [node name="Floor" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 
@@ -40,9 +37,26 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 shape = SubResource( 3 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Floor"]
-mesh = SubResource( 4 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="Steve" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.913461, 0 )
 script = ExtResource( 2 )
+
+[node name="cameraTarget" type="Spatial" parent="Steve"]
+transform = Transform( 1, 0, 0, 0, 0.975734, 0.218961, 0, -0.218961, 0.975734, 0, 4.76239, 10.5893 )
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.983089, 0.183128, 0, -0.183128, 0.983089, 0, 12.4382, 23.4209 )
+environment = ExtResource( 3 )
+target = NodePath("../Steve/cameraTarget")
+speed = 2.0
+enabled = true
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 0.523153, -0.639067, 0.56383, 0, 0.661587, 0.749869, -0.852239, -0.392296, 0.346111, 0, 6.94748, 0 )
+light_energy = 1.5
+shadow_enabled = true
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 60.0
